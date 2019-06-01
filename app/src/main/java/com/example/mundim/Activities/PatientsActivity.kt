@@ -119,6 +119,22 @@ class PatientsActivity : AppCompatActivity(){
         return true
     }
 
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when (item?.itemId) {
+            R.id.feedbackBtn -> {
+                val intent2 = Intent(this, FeedbackActivity::class.java)
+                intent2.putExtra("user_id", intent.extras.getString("user_id"))
+                startActivity(intent2)
+                return true
+            }
+            R.id.logoutBtn -> {
+                finish()
+                return true
+            }
+            else -> return super.onOptionsItemSelected(item)
+        }
+    }
+
     fun add(patient: Patient){
         patients.add(patient)
         patientsAdapter.notifyDataSetChanged()

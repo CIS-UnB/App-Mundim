@@ -20,7 +20,11 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme"
             android:usesCleartextTraffic="true">
-        <activity android:name=".Activities.LoginActivity" android:theme="@style/LoginTheme">
+        <activity android:name=".Activities.FeedbackActivity">
+        </activity>
+        <activity
+                android:name=".Activities.LoginActivity"
+                android:theme="@style/LoginTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
