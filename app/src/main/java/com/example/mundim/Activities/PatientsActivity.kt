@@ -9,9 +9,7 @@ import android.os.Bundle
 import android.support.v4.app.ActivityCompat.startActivityForResult
 import kotlinx.android.synthetic.main.activity_patients.*
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.BaseAdapter
 import android.widget.Toast
 import com.android.volley.Response
@@ -111,9 +109,14 @@ class PatientsActivity : AppCompatActivity(){
         async{
             query("SELECT * FROM `patients` WHERE `user_id`=$user_id", this@PatientsActivity, listener)
         }
-
         requestMultiplePermissions()
+        setSupportActionBar(toolbar)
+    }
 
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        var inflater = menuInflater
+        inflater.inflate(R.menu.options1, menu)
+        return true
     }
 
     fun add(patient: Patient){
@@ -150,6 +153,14 @@ class PatientsActivity : AppCompatActivity(){
                 patients[position].procedencia = data!!.extras.getString("procedencia")
                 patients[position].naturalidade = data!!.extras.getString("naturalidade")
                 patients[position].estado = data!!.extras.getString("estado")
+            }
+            if (resultCode == 2) {
+                var position = data!!.extras.getString("position").toInt()
+                patients.removeAt(position)
+                patientsAdapter.notifyDataSetChanged()
+                if (patients.size == 0){
+                    loadingTextView.text = "Sem pacientes cadastrados."
+                }
             }
         }
     }

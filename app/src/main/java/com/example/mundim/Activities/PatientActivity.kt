@@ -97,6 +97,18 @@ class PatientActivity : AppCompatActivity(), AmostrasFragment.SampleFragmentInte
         backBtn2.setOnClickListener{
             onBackPressed()
         }
+        trashBtn2.setOnClickListener {
+            val patient_id = bundle.getString("db_id")
+            query("""
+            DELETE FROM `patients`
+            WHERE `db_id`=$patient_id
+            """.trimIndent(), this, Response.Listener {response ->  })
+            var intent = Intent()
+            intent.putExtra("deleted", true)
+            intent.putExtra("position", bundle.getString("position"))
+            setResult(2, intent)
+            finish()
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -130,7 +142,6 @@ class PatientActivity : AppCompatActivity(), AmostrasFragment.SampleFragmentInte
                     if (samples.size == 0){
                         loadingTV.text = "Sem amostras para este paciente."
                     }
-                    showToast("Amostra deletada.")
                 }
                 else{
                     samples[position].antecedentes_familiares = data!!.extras.getString("antecedentes_familiares")
