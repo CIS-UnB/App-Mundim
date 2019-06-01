@@ -53,12 +53,13 @@ class PatientDataFragment : Fragment() {
                 activity!!.setResult(1, intent)
                 activity!!.finish()
             }
+            val user_id = activity!!.intent.extras.getString("user_id")
             async {
                 val input = """
                     INSERT INTO patients
-                    (nome, id, sexo, idade, procedencia, naturalidade, estado, data)
+                    (nome, id, user_id, sexo, idade, procedencia, naturalidade, estado, data)
                     VALUES
-                    ('$nome', '$id', '$sexo', '$idade', '$procedencia', '$naturalidade', '$estado', '$data')
+                    ('$nome', '$id', '$user_id', '$sexo', '$idade', '$procedencia', '$naturalidade', '$estado', '$data')
                 """.trimIndent()
                 execute(input, context!!, listener)
 

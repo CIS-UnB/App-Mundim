@@ -11,6 +11,16 @@
         <item name="android:colorEdgeEffect">@color/colorAccent</item>
     </style>
 
+    <style name="LoginTheme" parent="AppTheme">
+        <item name="colorControlNormal">#ffffff</item>
+        <item name="colorControlActivated">#ffffff</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:statusBarColor">@color/colorAccent</item>
+        <item name="android:navigationBarColor">@color/colorAccent</item>
+        <item name="android:windowBackground">@color/colorAccent</item>
+
+    </style>
+
     <!-- Base title theme. -->
     <style name="TitleTheme" parent="TextAppearance.AppCompat.Title">
         <!-- Customize your theme here. -->

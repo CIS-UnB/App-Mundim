@@ -83,8 +83,9 @@ class PatientsActivity : AppCompatActivity(){
         setContentView(R.layout.activity_patients)
 
         newPatientButton.setOnClickListener {
-            val intent = Intent(this, NewPatientActivity::class.java)
-            startActivityForResult(intent, GET_NEW_PATIENT_DATA )
+            val intent2 = Intent(this, NewPatientActivity::class.java)
+            intent2.putExtra("user_id", intent.extras.getString("user_id"))
+            startActivityForResult(intent2, GET_NEW_PATIENT_DATA)
         }
 
         patientsAdapter = PatientTicketAdapter(this, patients)
@@ -92,14 +93,23 @@ class PatientsActivity : AppCompatActivity(){
         val listener = Response.Listener<String> { response ->
             loadingTextView.text = "Carregando pacientes..."
             Log.e("HttpClient", "success! response: $response")
+            var has_patients = false
             for (item in Klaxon().parseArray<Patient>(response)!!.iterator()){
                 patients.add(item)
+                has_patients = true
             }
             patientsAdapter.notifyDataSetChanged()
-            loadingTextView.text = ""
+            if (has_patients){
+                loadingTextView.text = ""
+            }
+            else{
+                loadingTextView.text = "Sem pacientes cadastrados."
+            }
         }
+        val user_id = intent.extras.getString("user_id")
+        Log.e("UserID", user_id)
         async{
-            query("SELECT * FROM patients", this@PatientsActivity, listener)
+            query("SELECT * FROM `patients` WHERE `user_id`=$user_id", this@PatientsActivity, listener)
         }
 
         requestMultiplePermissions()
@@ -114,6 +124,7 @@ class PatientsActivity : AppCompatActivity(){
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == GET_NEW_PATIENT_DATA) {
             if (resultCode == 1) {
+                loadingTextView.text = ""
                 add(
                     Patient(
                         db_id = data!!.extras.getString("db_id"),

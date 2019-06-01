@@ -9,7 +9,7 @@ import java.util.HashMap
 
 fun query(input:String, context: Context, successfulResponseListener: Response.Listener<String>){
     val queue = Volley.newRequestQueue(context)
-    val url = "http://68.183.133.221/mundim/query.php"
+    val url = "http://68.183.133.221/mundim/query2.php"
 
     val sr = object : StringRequest(
         Request.Method.POST, url,
@@ -36,7 +36,7 @@ fun execute(input:String, context: Context, successfulResponseListener: Response
     var result = "0"
 
     val queue = Volley.newRequestQueue(context)
-    val url = "http://68.183.133.221/mundim/execute.php"
+    val url = "http://68.183.133.221/mundim/execute2.php"
 
     val sr = object : StringRequest(
         Request.Method.POST, url,

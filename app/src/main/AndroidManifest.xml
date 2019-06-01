@@ -20,6 +20,13 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme"
             android:usesCleartextTraffic="true">
+        <activity android:name=".Activities.LoginActivity" android:theme="@style/LoginTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
         <activity android:name=".Activities.SampleActivity">
         </activity>
         <activity android:name=".Activities.NewSampleActivity">
@@ -42,11 +49,6 @@
         <activity android:name=".Activities.NewPatientActivity">
         </activity>
         <activity android:name=".Activities.PatientsActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
         </activity>
     </application>
 
