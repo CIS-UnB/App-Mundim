@@ -25,12 +25,12 @@ import kotlinx.android.synthetic.main.fragment_login.view.*
 import org.jetbrains.anko.async
 import android.app.Activity
 import android.support.v4.content.ContextCompat.getSystemService
+import android.support.v4.content.ContextCompat.startActivity
+import android.support.v4.os.HandlerCompat.postDelayed
+import android.os.Handler
 
 
 class LoginFragment : Fragment() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,6 +40,9 @@ class LoginFragment : Fragment() {
         view.signUpBtn.setOnClickListener {
             activity!!.viewPager.currentItem = 1
         }
+
+        val sharedPref = activity!!.getSharedPreferences("login", Context.MODE_PRIVATE)
+
         view.loginBtn.setOnClickListener {
             val listener = Response.Listener<String> { response ->
                 Log.e("LoginResponse", response)
@@ -47,6 +50,10 @@ class LoginFragment : Fragment() {
                 for (item in Klaxon().parseArray<User>(response)!!.iterator()){
                     val intent = Intent(context, PatientsActivity::class.java)
                     intent.putExtra("user_id", item.id)
+                    with (sharedPref.edit()) {
+                        putString("user_id", item.id)
+                        apply()
+                    }
                     activity!!.startActivity(intent)
                     logged = true
                 }

@@ -76,22 +76,19 @@ class PatientsActivity : AppCompatActivity(){
     var patients = ArrayList<Patient>()
     private lateinit var patientsAdapter: PatientTicketAdapter
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_patients)
+    override fun onBackPressed() {
 
-        newPatientButton.setOnClickListener {
-            val intent2 = Intent(this, NewPatientActivity::class.java)
-            intent2.putExtra("user_id", intent.extras.getString("user_id"))
-            startActivityForResult(intent2, GET_NEW_PATIENT_DATA)
-        }
+    }
 
-        patientsAdapter = PatientTicketAdapter(this, patients)
-        patientsListView.adapter = patientsAdapter
+    override fun onResume() {
+        super.onResume()
         val listener = Response.Listener<String> { response ->
             loadingTextView.text = "Carregando pacientes..."
             Log.e("HttpClient", "success! response: $response")
             var has_patients = false
+            patients.clear()
+            patientsAdapter.notifyDataSetChanged()
+
             for (item in Klaxon().parseArray<Patient>(response)!!.iterator()){
                 patients.add(item)
                 has_patients = true
@@ -109,6 +106,21 @@ class PatientsActivity : AppCompatActivity(){
         async{
             query("SELECT * FROM `patients` WHERE `user_id`=$user_id", this@PatientsActivity, listener)
         }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_patients)
+
+        newPatientButton.setOnClickListener {
+            val intent2 = Intent(this, NewPatientActivity::class.java)
+            intent2.putExtra("user_id", intent.extras.getString("user_id"))
+            startActivityForResult(intent2, GET_NEW_PATIENT_DATA)
+        }
+
+        patientsAdapter = PatientTicketAdapter(this, patients)
+        patientsListView.adapter = patientsAdapter
+
         requestMultiplePermissions()
         setSupportActionBar(toolbar)
     }
@@ -128,6 +140,11 @@ class PatientsActivity : AppCompatActivity(){
                 return true
             }
             R.id.logoutBtn -> {
+                val sharedPref = getSharedPreferences("login", Context.MODE_PRIVATE)
+                with (sharedPref.edit()) {
+                    putString("user_id", "-1")
+                    commit()
+                }
                 finish()
                 return true
             }
