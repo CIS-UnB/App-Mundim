@@ -210,18 +210,22 @@ class CameraFragment : Fragment(), View.OnClickListener,
                 val characteristics = manager.getCameraCharacteristics(cameraId)
 
                 val maxZoomLevel = characteristics.get(CameraCharacteristics.SCALER_AVAILABLE_MAX_DIGITAL_ZOOM)
-                var zoomLevel = 2f // DEFAULT ZOOM
-                if (maxZoomLevel < zoomLevel){
+                var zoomLevel = 0.0f // DEFAULT ZOOM
+                /*if (maxZoomLevel < zoomLevel){
                     zoomLevel = maxZoomLevel
-                }
-                val ratio = 1.0f/zoomLevel
+                }*/
+                val ratio = 1.0f // /zoomLevel
                 val rect = characteristics.get(CameraCharacteristics.SENSOR_INFO_ACTIVE_ARRAY_SIZE)
                 val croppedWidth = (rect.width() - Math.round(rect.width() * ratio))
                 val croppedHeight = (rect.height() - Math.round(rect.height()* ratio))
                 zoom = Rect(
+                    0, 0,
+                    rect.width(), rect.height()
+                )
+                /* zoom = Rect(
                     croppedWidth / 2, croppedHeight / 2,
                     rect.width() - croppedWidth / 2, rect.height() - croppedHeight / 2
-                )
+                ) */
 
                 // We don't use a front facing camera in this sample.
                 val cameraDirection = characteristics.get(CameraCharacteristics.LENS_FACING)
@@ -246,7 +250,9 @@ class CameraFragment : Fragment(), View.OnClickListener,
                 // coordinate.
                 val displayRotation = activity!!.windowManager.defaultDisplay.rotation
 
-                sensorOrientation = characteristics.get(CameraCharacteristics.SENSOR_ORIENTATION)
+                sensorOrientation = 0 /*
+                This code might not work with some types of camera
+                characteristics.get(CameraCharacteristics.SENSOR_ORIENTATION) */
                 val swappedDimensions = areDimensionsSwapped(displayRotation)
 
                 val displaySize = Point()
@@ -584,8 +590,8 @@ class CameraFragment : Fragment(), View.OnClickListener,
         private val STATE_WAITING_PRECAPTURE = 2
         private val STATE_WAITING_NON_PRECAPTURE = 3
         private val STATE_PICTURE_TAKEN = 4
-        private val MAX_PREVIEW_WIDTH = 1920
-        private val MAX_PREVIEW_HEIGHT = 1080
+        private val MAX_PREVIEW_WIDTH = 4000
+        private val MAX_PREVIEW_HEIGHT = 3000
         @JvmStatic private fun chooseOptimalSize(
             choices: Array<Size>,
             textureViewWidth: Int,
